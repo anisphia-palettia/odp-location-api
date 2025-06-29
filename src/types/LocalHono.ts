@@ -1,7 +1,7 @@
 import {Hono} from "hono";
 
 type Variables = {
-    clientId: string;
+    sessionId: string;
 };
 
 export class LocalHono extends Hono<{

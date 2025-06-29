@@ -4,6 +4,7 @@ import type {ContentfulStatusCode} from "hono/utils/http-status";
 
 type ApiResponseSuccess<T = any> = {
     success: boolean;
+    origin?: string;
     data?: T;
     message: string;
     token?: string;
@@ -11,6 +12,7 @@ type ApiResponseSuccess<T = any> = {
 
 type ApiResponseError = {
     success: boolean;
+    origin?: string;
     error: {
         message: string;
         details?: any;
@@ -22,6 +24,7 @@ export function sendSuccess<T = any>(
     c: Context,
     {
         message,
+        origin,
         status = 200,
         data,
         token,
@@ -30,11 +33,13 @@ export function sendSuccess<T = any>(
         status?: ContentfulStatusCode;
         data?: T;
         token?: string;
+        origin?: string
     }
 ) {
     return c.json<ApiResponseSuccess>(
         {
             success: true,
+            origin,
             message: message,
             data: data,
             token: token,
@@ -47,11 +52,13 @@ export function sendError(
     c: Context,
     {
         message,
+        origin,
         detail,
         stack,
         status,
     }: {
         message: string;
+        origin?: string
         detail?: any;
         stack?: string;
         status: ContentfulStatusCode;
@@ -60,6 +67,7 @@ export function sendError(
     return c.json<ApiResponseError>(
         {
             success: false,
+            origin: origin,
             error: {
                 message: message,
                 details: detail,
