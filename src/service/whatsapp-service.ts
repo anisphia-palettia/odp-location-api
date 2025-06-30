@@ -18,6 +18,7 @@ export default function WhatsappService(sessionId: string) {
             });
             return response.data;
         },
+<<<<<<< HEAD
         message: {
             messageRoute: "/message",
             async byChatId(chatId: string): Promise<ApiResponse> {
@@ -38,5 +39,8 @@ export default function WhatsappService(sessionId: string) {
                 return response.data;
             }
         }
+=======
+        message: {}
+>>>>>>> fcbe43286b97e0c570b5621429d10485615e6254
     };
 }
