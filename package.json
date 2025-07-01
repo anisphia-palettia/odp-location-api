@@ -4,13 +4,15 @@
   "type": "module",
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "prisma": "^6.10.1"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.0",
+    "@prisma/client": "^6.10.1",
     "axios": "^1.10.0",
     "hono": "^4.8.0",
     "winston": "^3.17.0",
