@@ -11,6 +11,5 @@ _r_api.route("/start", r_startHandler);
 _r_api.route("/qr", r_qrHandler);
 _r_api.route("/odp-filter", r_odp_filter);
 _r_api.route("/groups", r_groupsHandler);
-_r_api.route("/web-hook", r_webhook);
 
 export default _r_api;

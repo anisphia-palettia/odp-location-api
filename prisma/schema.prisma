@@ -15,9 +15,10 @@ datasource db {
 }
 
 model Group {
-  id     Int    @id @default(autoincrement())
-  name   String
-  chatId String @unique
+  id          Int          @id @default(autoincrement())
+  name        String
+  chatId      String       @unique
+  coordinates Coordinate[]
 }
 
 model Coordinate {
@@ -25,4 +26,7 @@ model Coordinate {
   imagePath String?
   long      String
   lat       String
+
+  groupId Int?
+  Group   Group? @relation(fields: [groupId], references: [id])
 }
