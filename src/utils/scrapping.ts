@@ -1,38 +1,37 @@
-import puppeteer from 'puppeteer';
-import type { Coordinates } from "@/types/whatsapp.ts";
+import {getBrowser} from "@/utils/browser-manager.ts";
+import type {Coordinates} from "@/types/whatsapp.ts";
+import type {Page} from "playwright";
 
-export async function getCoordinatesFromTimemark(url: string): Promise<Coordinates | null> {
-    console.log(`[puppeteer] 🟡 getCoordinatesFromTimemark DIPANGGIL untuk: ${url}`);
-
-    const browser = await puppeteer.launch({ headless: false });
-    const page = await browser.newPage();
-    console.log('[puppeteer] ✅ newPage dibuka');
+export async function getCoordinatesFromPage(url: string): Promise<Coordinates | null> {
+    const browser = await getBrowser();
+    const page: Page = await browser.newPage();
 
     try {
-        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
-        console.log('[puppeteer] 🌐 Halaman dimuat');
+        await page.goto(url, {waitUntil: 'networkidle'});
+        await page.waitForSelector('.content .cardItem', {timeout: 10000});
 
-        await page.waitForSelector('.cardItem', { timeout: 10000 });
-        console.log('[puppeteer] 🎯 .cardItem ditemukan');
+        const gpsText = await page.locator('.content .cardItem', {
+            has: page.locator('.top', {hasText: 'GPS'})
+        }).locator('.bottom').textContent();
 
-        return await page.evaluate(() => {
-            const item = document.querySelector('.cardItem');
-            const label = item?.querySelector('.top')?.textContent?.trim();
-            const value = item?.querySelector('.bottom')?.textContent?.trim();
-            if (label === 'GPS' && value) {
-                const [lat, long] = value.split(',').map((v) => v.trim());
-                if (lat && long) {
-                    return { lat, long };
-                }
+        if (gpsText) {
+            const parts = gpsText.trim().split(',').map(v => v.trim());
+
+            if (parts.length === 2 && parts[0] && parts[1]) {
+                const [lat, lng] = parts;
+                return {lat, long: lng};
+            } else {
+                console.warn('Format GPS tidak valid:', gpsText);
+                return null;
             }
+        } else {
+            console.warn('gpsText kosong atau null');
             return null;
-        });
+        }
     } catch (err) {
-        console.error('[puppeteer] ❌ ERROR:', err);
+        console.error('Error:', err);
         return null;
     } finally {
-        await page.close();
-        await browser.close();
-        console.log('[puppeteer] 🔒 Tab dan browser ditutup');
+        await page.close(); // hanya tutup tab
     }
 }

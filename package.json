@@ -4,20 +4,19 @@
   "type": "module",
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest",
-    "prisma": "^6.10.1"
-  },
-  "peerDependencies": {
+    "@types/node": "^24.0.10",
+    "prisma": "^6.10.1",
+    "tsx": "^4.20.3",
     "typescript": "^5"
   },
   "dependencies": {
+    "@hono/node-server": "^1.15.0",
     "@hono/zod-validator": "^0.7.0",
     "@prisma/client": "^6.10.1",
     "axios": "^1.10.0",
+    "dotenv": "^17.0.1",
     "hono": "^4.8.0",
-    "p-limit": "^6.2.0",
-    "p-retry": "^6.2.1",
-    "puppeteer": "^24.11.1",
+    "playwright": "^1.53.2",
     "winston": "^3.17.0",
     "zod": "^3.25.67"
   }

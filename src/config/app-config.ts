@@ -1,6 +1,9 @@
+import * as process from "node:process";
+
 export const appConfig = {
-    nodeEnv: Bun.env.NODE_ENV || "production",
-    appPort: Bun.env.APP_PORT || 3000,
-    whatsappServiceUrl: Bun.env.WHATSAPP_SERVICE_URL || "",
-    sessionId: Bun.env.SESSION_ID || "",
+    nodeEnv: process.env.NODE_ENV || "production",
+    appPort: process.env.APP_PORT || 3000,
+    appHost: process.env.APP_HOST || "localhost",
+    whatsappServiceUrl: process.env.WHATSAPP_SERVICE_URL || "",
+    sessionId: process.env.SESSION_ID || "",
 }

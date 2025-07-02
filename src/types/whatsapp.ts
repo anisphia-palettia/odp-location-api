@@ -31,6 +31,7 @@ export interface IWhatsappWebhookMessage {
     caption: string;
     mediaPath: string | null;
     timestamp: string;
+    msg?: any
 }
 
 

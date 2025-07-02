@@ -1,18 +1,20 @@
 import {LocalHono} from "@/types/LocalHono.ts";
 import {sendSuccess} from "@/utils/response.ts";
 import type {IWhatsappWebhookMessage} from "@/types/whatsapp.ts";
-import {getCoordinatesFromTimemark} from "@/utils/scrapping.ts";
 import {saveFile} from "@/utils/save-file.ts";
 import {appConfig} from "@/config/app-config.ts";
 import * as path from "node:path";
 import {GroupService} from "@/service/group-service.ts";
 import {CoordinateService} from "@/service/coordinate-service.ts";
 import {logger} from "@/lib/logger.ts";
+import {getCoordinatesFromPage} from "@/utils/scrapping.ts";
+import WhatsappService from "@/service/whatsapp-service.ts";
 
-const r_webhook = new LocalHono()
+const r_webhook = new LocalHono();
 
 r_webhook.post("", async (c) => {
     const data = await c.req.json() as IWhatsappWebhookMessage;
+    console.log(data);
 
     logger.info(`[${data.messageId}] Webhook diterima dari ${data.name}`);
 
@@ -34,21 +36,15 @@ r_webhook.post("", async (c) => {
         ? rawLink.startsWith('http') ? rawLink : `https://${rawLink}`
         : null;
 
-
     logger.info(`[${data.messageId}] Link ditemukan: ${normalizedLink}`);
 
-    const coordinates = normalizedLink ? await getCoordinatesFromTimemark(normalizedLink) : null;
-
-    if (!coordinates) {
-        logger.warn(`[${data.messageId}] Gagal mendapatkan koordinat dari link`);
+    if (!normalizedLink) {
+        logger.warn(`[${data.messageId}] Link tidak valid`);
         return sendSuccess(c, {
-            message: "Koordinat tidak ditemukan",
+            message: "Dilewatkan: link tidak valid",
             data: null
         });
     }
-
-    const latStr = coordinates.lat ?? 'unknown_lat';
-    const longStr = coordinates.long ?? 'unknown_long';
 
     if (!data.mediaPath) {
         logger.warn(`[${data.messageId}] Dilewatkan - tidak mengandung media`);
@@ -58,40 +54,45 @@ r_webhook.post("", async (c) => {
         });
     }
 
+    const coordinates = await getCoordinatesFromPage(normalizedLink);
+
+    if (!coordinates || !coordinates.lat || !coordinates.long) {
+        logger.warn(`[${data.messageId}] Koordinat tidak ditemukan di halaman`);
+        return sendSuccess(c, {
+            message: "Dilewatkan: koordinat tidak ditemukan",
+            data: null
+        });
+    }
+
     const ext = path.extname(data.mediaPath) || '.jpg';
-    const fileName = `${latStr}_${longStr}${ext}`;
+    const fileName = `${coordinates.lat}_${coordinates.long}${ext}`;
     const relativeFilePath = path.join(data.name, fileName);
     const mediaUrl = appConfig.whatsappServiceUrl + `/${data.mediaPath}`;
 
     logger.info(`[${data.messageId}] Menyimpan file dari ${mediaUrl} ke ${relativeFilePath}`);
 
-    try {
-        const fullPath = await saveFile(mediaUrl, relativeFilePath);
-        logger.info(`[${data.messageId}] File berhasil disimpan: ${fullPath}`);
+    const fullPath = await saveFile(mediaUrl, relativeFilePath);
+    logger.info(`[${data.messageId}] File berhasil disimpan: ${fullPath}`);
 
-        const exist = await GroupService.getByChatId(data.chatId);
-        const group = exist ?? await GroupService.create(
-            {
-                name: data.name,
-                chatId: data.chatId
-            }
-        )
+    const exist = await GroupService.getByChatId(data.chatId);
+    const group = exist ?? await GroupService.create({
+        name: data.name,
+        chatId: data.chatId
+    });
 
-        await CoordinateService.create(coordinates, fullPath, group.id);
+    await CoordinateService.create(coordinates, fullPath, group.id);
 
-        logger.info(`[${data.messageId}] Koordinat dan grup berhasil disimpan ke database`);
+    logger.info(`[${data.messageId}] Koordinat dan grup berhasil disimpan ke database`);
 
-        return sendSuccess(c, {
-            message: "Success save",
-            data
-        });
-    } catch (err) {
-        logger.error(`[${data.messageId}] Error saat menyimpan file atau menyimpan ke DB`, err);
-        return sendSuccess(c, {
-            message: "Gagal menyimpan file atau menyimpan ke database",
-            data: null
-        });
-    }
+    const normalize = fullPath.replace(/\\/g, '/');
+
+    const text = `Berhasil menyimpan lokasi dan gambar\nKoordinat : ${coordinates.lat}, ${coordinates.long}\nGambar: ${appConfig.appHost}/${normalize}`
+    await WhatsappService().message.text(text, data.msg.key.remoteJid!, data.msg);
+
+    return sendSuccess(c, {
+        message: "Success save",
+        data
+    });
 });
 
 export default r_webhook;
