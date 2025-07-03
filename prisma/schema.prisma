@@ -30,3 +30,9 @@ model Coordinate {
   groupId Int?
   Group   Group? @relation(fields: [groupId], references: [id])
 }
+
+model Error {
+  id   Int     @id @default(autoincrement())
+  url  String
+  done Boolean @default(false)
+}

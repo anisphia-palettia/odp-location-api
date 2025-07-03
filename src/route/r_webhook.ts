@@ -9,6 +9,7 @@ import {CoordinateService} from "@/service/coordinate-service.ts";
 import {logger} from "@/lib/logger.ts";
 import {getCoordinatesFromPage} from "@/utils/scrapping.ts";
 import WhatsappService from "@/service/whatsapp-service.ts";
+import {ErrorService} from "@/service/error-service.ts";
 
 const r_webhook = new LocalHono();
 
@@ -58,6 +59,8 @@ r_webhook.post("", async (c) => {
 
     if (!coordinates || !coordinates.lat || !coordinates.long) {
         logger.warn(`[${data.messageId}] Koordinat tidak ditemukan di halaman`);
+        await WhatsappService().message.text(`Koordinat tidak ditemukan di halaman\n${normalizedLink}`, data.msg.key.remoteJid!, data.msg);
+        await ErrorService.create(normalizedLink)
         return sendSuccess(c, {
             message: "Dilewatkan: koordinat tidak ditemukan",
             data: null
