@@ -28,6 +28,7 @@ model Coordinate {
   lat       String
 
   address String
+  urlId   String?
 
   groupId Int?
   Group   Group? @relation(fields: [groupId], references: [id])

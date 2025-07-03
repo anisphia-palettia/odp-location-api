@@ -10,6 +10,7 @@ export const CoordinateService = {
         address: data.address,
         lat: data.lat,
         long: data.long,
+        urlId : data.urlId,
       },
     });
   },

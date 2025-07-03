@@ -81,14 +81,14 @@ r_webhook.post("", async (c) => {
         name: data.name,
         chatId: data.chatId
     });
-    
-    const coor = await CoordinateService.create(coordinates, fullPath, group.id);
+
+    await CoordinateService.create(coordinates, fullPath, group.id);
 
     logger.info(`[${data.messageId}] Koordinat dan grup berhasil disimpan ke database`);
 
     // const normalize = fullPath.replace(/\\/g, '/');
 
-    const text = `Berhasil menyimpan lokasi dan gambar\nKoordinat : ${coordinates.lat}, ${coordinates.long}\nAlamat : ${coordinates.address}`
+    const text = `Berhasil menyimpan lokasi dan gambar\nKoordinat : ${coordinates.lat}, ${coordinates.long}\nAlamat : ${coordinates.address}\nUrlId : ${coordinates.urlId}`
     await WhatsappService().message.text(text, data.msg.key.remoteJid!, data.msg);
 
     return sendSuccess(c, {

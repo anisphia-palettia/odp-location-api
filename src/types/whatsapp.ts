@@ -38,4 +38,5 @@ export interface Coordinates {
   lat: string;
   long: string;
   address: string;
+  urlId? : string
 }

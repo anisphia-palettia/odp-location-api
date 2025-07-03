@@ -14,7 +14,7 @@ export async function getCoordinatesFromPage(url: string): Promise<Coordinates |
             has: page.locator('.top', {hasText: 'Address'})
         }).locator('.bottom').textContent();
 
-        if(!addressText) {
+        if (!addressText) {
             return null
         }
 
@@ -28,7 +28,10 @@ export async function getCoordinatesFromPage(url: string): Promise<Coordinates |
 
             if (parts.length === 2 && parts[0] && parts[1]) {
                 const [lat, lng] = parts;
-                return {lat, long: lng, address : addressText};
+                const urlParts = url.split('/');
+                const urlId = urlParts[4];
+                console.log(urlId);
+                return {lat, long: lng, address: addressText, urlId};
             } else {
                 console.warn('Format GPS tidak valid:', gpsText);
                 return null;
