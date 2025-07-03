@@ -15,7 +15,7 @@ const r_webhook = new LocalHono();
 
 r_webhook.post("", async (c) => {
     const data = await c.req.json() as IWhatsappWebhookMessage;
-    
+
     logger.info(`[${data.messageId}] Webhook diterima dari ${data.name}`);
 
     const match = data.text.match(/Lokasi dan Verifikasi[:：]?[^\n]*/i);
@@ -88,7 +88,7 @@ r_webhook.post("", async (c) => {
 
     const normalize = fullPath.replace(/\\/g, '/');
 
-    const text = `Berhasil menyimpan lokasi dan gambar\nKoordinat : ${coordinates.lat}, ${coordinates.long}\nGambar: ${appConfig.appHost}/${normalize}`
+    const text = `Berhasil menyimpan lokasi dan gambar\nKoordinat : ${coordinates.lat}, ${coordinates.long}`
     await WhatsappService().message.text(text, data.msg.key.remoteJid!, data.msg);
 
     return sendSuccess(c, {
