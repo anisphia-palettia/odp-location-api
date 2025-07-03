@@ -10,9 +10,16 @@ export async function getCoordinatesFromPage(url: string): Promise<Coordinates |
         await page.goto(url, {waitUntil: 'networkidle'});
         await page.waitForSelector('.content .cardItem', {timeout: 10000});
 
+        const addressText = await page.locator('.content .cardItem', {
+            has: page.locator('.top', {hasText: 'Address'})
+        }).locator('.bottom').textContent();
+
+        console.log('addressText', addressText)
+
         const gpsText = await page.locator('.content .cardItem', {
             has: page.locator('.top', {hasText: 'GPS'})
         }).locator('.bottom').textContent();
+
 
         if (gpsText) {
             const parts = gpsText.trim().split(',').map(v => v.trim());
