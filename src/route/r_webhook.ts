@@ -15,8 +15,7 @@ const r_webhook = new LocalHono();
 
 r_webhook.post("", async (c) => {
     const data = await c.req.json() as IWhatsappWebhookMessage;
-    console.log(data);
-
+    
     logger.info(`[${data.messageId}] Webhook diterima dari ${data.name}`);
 
     const match = data.text.match(/Lokasi dan Verifikasi[:：]?[^\n]*/i);
