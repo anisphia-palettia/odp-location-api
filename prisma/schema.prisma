@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -15,27 +9,31 @@ datasource db {
 }
 
 model Group {
-  id          Int          @id @default(autoincrement())
-  name        String
-  chatId      String       @unique
-  coordinates Coordinate[]
+  id          Int          @id @default(autoincrement()) @map("id")
+  name        String       @map("name")
+  chatId      String       @unique @map("chat_id")
+  coordinates Coordinate[] @relation("group_coordinates")
+
+  @@map("group")
 }
 
 model Coordinate {
-  id        Int     @id @default(autoincrement())
-  imagePath String?
-  long      String
-  lat       String
+  id        Int     @id @default(autoincrement()) @map("id")
+  imagePath String? @map("image_path")
+  long      String  @map("long")
+  lat       String  @map("lat")
+  address   String  @map("address")
+  urlId     String? @map("url_id")
+  groupId   Int?    @map("group_id")
+  Group     Group?  @relation(fields: [groupId], references: [id], name: "group_coordinates")
 
-  address String
-  urlId   String?
-
-  groupId Int?
-  Group   Group? @relation(fields: [groupId], references: [id])
+  @@map("coordinate")
 }
 
 model Error {
-  id   Int     @id @default(autoincrement())
-  url  String
-  done Boolean @default(false)
+  id   Int     @id @default(autoincrement()) @map("id")
+  url  String  @map("url")
+  done Boolean @default(false) @map("done")
+
+  @@map("error")
 }
