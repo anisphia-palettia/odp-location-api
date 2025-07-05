@@ -22,10 +22,10 @@ model Coordinate {
   imagePath String? @map("image_path")
   long      String  @map("long")
   lat       String  @map("lat")
-  address   String  @map("address")
-  urlId     String? @map("url_id")
   groupId   Int?    @map("group_id")
-  Group     Group?  @relation(fields: [groupId], references: [id], name: "group_coordinates")
+  address   String?  @map("address")
+  urlId     String? @map("url_id")
+  Group     Group?  @relation("group_coordinates", fields: [groupId], references: [id])
 
   @@map("coordinate")
 }
