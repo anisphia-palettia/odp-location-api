@@ -64,6 +64,7 @@ export function sendError(
         status: ContentfulStatusCode;
     }
 ) {
+    console.log("ERROR", message, stack)
     return c.json<ApiResponseError>(
         {
             success: false,
