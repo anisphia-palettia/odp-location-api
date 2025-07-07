@@ -22,7 +22,9 @@ r_webhook.post("", async (c) => {
 
   logger.info(`[${data.messageId}] Webhook diterima dari ${data.name}`);
 
-  const match = data.text.match(/Lokasi dan Verifikasi[:：]?[^\n]*/i);
+  const match = data.text.match(
+    /(?:Lokasi|Location)\s*(?:dan|and|&)\s*(?:Verifikasi|Verification)[:：]?[^\n]*/i
+  );
   const filter = match?.[0] ?? null;
 
   if (!filter) {
@@ -87,7 +89,7 @@ r_webhook.post("", async (c) => {
     `[${data.messageId}] Menyimpan file dari ${mediaUrl} ke ${relativeFilePath}`
   );
 
-  const fullPath = await saveFile(mediaUrl, relativeFilePath);
+  const { fullPath } = await saveFile(mediaUrl, relativeFilePath);
   logger.info(`[${data.messageId}] File berhasil disimpan: ${fullPath}`);
 
   let exist = await GroupService.getByChatId(data.chatId);
@@ -104,15 +106,16 @@ r_webhook.post("", async (c) => {
     await GroupService.updateById(exist.id, data.name);
   }
 
-  await CoordinateService.create(coordinates, fullPath, exist.id);
+  await CoordinateService.create(coordinates, fileName, exist.id);
 
   logger.info(
     `[${data.messageId}] Koordinat dan grup berhasil disimpan ke database`
   );
 
-  // const normalize = fullPath.replace(/\\/g, '/');
+  const normalize = fullPath.replace(/\\/g, "/");
+  const linkGambar = `https://odp.tridatafiber.com/${normalize}`;
 
-  const text = `Berhasil menyimpan lokasi dan gambar\nKoordinat : ${coordinates.lat}, ${coordinates.long}\nAlamat : ${coordinates.address}\nUrlId : ${coordinates.urlId}`;
+  const text = `✅ Berhasil menyimpan lokasi dan gambar\n\n*Koordinat* : ${coordinates.lat}, ${coordinates.long}\n*Alamat* : ${coordinates.address}\n*UrlId* : ${coordinates.urlId}\n\n*Gambar* : ${linkGambar}\n\n====================`;
   await WhatsappService().message.text(text, data.msg.key.remoteJid!, data.msg);
 
   return sendSuccess(c, {

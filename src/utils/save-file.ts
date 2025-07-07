@@ -2,7 +2,7 @@ import * as fs from "node:fs";
 import axios from "axios";
 import * as path from "node:path";
 
-export async function saveFile(fileUrl: string, relativeFilePath: string): Promise<string> {
+export async function saveFile(fileUrl: string, relativeFilePath: string): Promise<{ fullPath: string, fileName: string }> {
     const fullPath = path.join("public", relativeFilePath);
     const folder = path.dirname(fullPath);
 
@@ -19,7 +19,10 @@ export async function saveFile(fileUrl: string, relativeFilePath: string): Promi
     response.data.pipe(writer);
 
     return new Promise((resolve, reject) => {
-        writer.on('finish', () => resolve(fullPath));
+        writer.on('finish', () => {
+            const fileName = path.basename(fullPath);
+            resolve({ fullPath, fileName });
+        });
         writer.on('error', reject);
     });
 }
