@@ -10,7 +10,7 @@ r_groupsHandler.get("",
         const groups = await GroupService.all()
         return sendSuccess(c, {
             message: "Success get all groups",
-            data: groups
+            data: groups,
         })
     }
 )

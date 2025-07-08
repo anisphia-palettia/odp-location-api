@@ -23,7 +23,22 @@ export const GroupService = {
     },
 
     async all() {
-        return prisma.group.findMany();
+        const groups = await prisma.group.findMany({
+            include: {
+                _count: {
+                    select: {
+                        coordinates: true,
+                    },
+                },
+            },
+        });
+
+        return groups.map(group => ({
+            id: group.id,
+            name: group.name,
+            chatId: group.chatId,
+            totalCoordinates: group._count.coordinates,
+        }));
     },
 
     async findByChatIdAndCoordinates(chatId: string) {
