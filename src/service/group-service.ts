@@ -6,23 +6,42 @@ export const GroupService = {
             data,
         });
     },
+    async getById(id: number) {
+        return prisma.group.findUnique({
+            where: {id},
+        });
+    },
+
     async getByChatId(chatId: string) {
         return prisma.group.findUnique({
             where: {chatId},
         });
     },
-    async updateById(id: number, name: string) {
+
+    async getAll() {
+        return prisma.group.findMany();
+    },
+
+    async updateById(id: number, data: { name?: string; chatId?: string }) {
         return prisma.group.update({
-            where: {
-                id,
-            },
-            data: {
-                name,
-            },
+            where: {id},
+            data,
         });
     },
 
-    async all() {
+    async deleteById(id: number) {
+        return prisma.group.delete({
+            where: {id},
+        });
+    },
+
+    async deleteByChatId(chatId: string) {
+        return prisma.group.delete({
+            where: {chatId},
+        });
+    },
+
+    async getAllWithCoordinateCount() {
         const groups = await prisma.group.findMany({
             include: {
                 _count: {
@@ -41,7 +60,7 @@ export const GroupService = {
         }));
     },
 
-    async findByChatIdAndCoordinates(chatId: string) {
+    async getWithCoordinatesByChatId(chatId: string) {
         return prisma.group.findUnique({
             where: {chatId},
             include: {
@@ -50,7 +69,7 @@ export const GroupService = {
         });
     },
 
-    async combinedAll() {
+    async getAllWithCoordinates() {
         return prisma.group.findMany({
                 include: {
                     coordinates: true,
