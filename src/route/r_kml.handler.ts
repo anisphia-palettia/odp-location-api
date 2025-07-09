@@ -3,9 +3,9 @@ import {GroupService} from "@/service/group-service.ts";
 import {generateAllGroupsKML, generateKML} from "@/utils/generate-kml.ts";
 import {HTTPException} from "hono/http-exception";
 
-const r_kmlHandler = new LocalHono()
+const   r_kmlHandler = new LocalHono()
 
-r_kmlHandler.get("/kml", async (c) => {
+r_kmlHandler.get("/", async (c) => {
     const groups = await GroupService.getAllWithCoordinates();
     if (!groups || groups.length === 0) {
         throw new HTTPException(404, {message: "No groups found"});
@@ -20,7 +20,7 @@ r_kmlHandler.get("/kml", async (c) => {
     });
 });
 
-r_kmlHandler.get("/kml/:chatId", async (c) => {
+r_kmlHandler.get("/:chatId", async (c) => {
     const chatId = c.req.param("chatId");
     const group = await GroupService.getWithCoordinatesByChatId(chatId);
     if (!group) {
