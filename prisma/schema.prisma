@@ -13,6 +13,7 @@ model Group {
   name        String       @map("name")
   chatId      String       @unique @map("chat_id")
   coordinates Coordinate[] @relation("group_coordinates")
+  errors      Error[]      @relation("group_erros")
 
   @@map("group")
 }
@@ -34,9 +35,11 @@ model Coordinate {
 }
 
 model Error {
-  id   Int     @id @default(autoincrement()) @map("id")
-  url  String  @map("url")
-  done Boolean @default(false) @map("done")
+  id      Int     @id @default(autoincrement()) @map("id")
+  url     String  @map("url")
+  done    Boolean @default(false) @map("done")
+  groupId Int?    @map("group_id")
+  Group   Group?  @relation("group_erros", fields: [groupId], references: [id])
 
   @@map("error")
 }
