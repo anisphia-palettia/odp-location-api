@@ -1,5 +1,5 @@
 import type {Context} from "hono";
-import {appConfig} from "@/config/app-config.ts";
+import {appConfig} from "@/config/app-config";
 import type {ContentfulStatusCode} from "hono/utils/http-status";
 
 type ApiResponseSuccess<T = any> = {

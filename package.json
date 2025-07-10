@@ -1,11 +1,19 @@
 {
   "name": "odp-location-api",
   "module": "index.ts",
-  "type": "module",
+  "type": "commonjs",
   "private": true,
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "start": "cross-env NODE_ENV=production node -r tsconfig-paths/register dist/server.js",
+    "dev": "cross-env NODE_ENV=development tsx watch src/index.ts"
+  },
+
   "devDependencies": {
     "@types/node": "^24.0.10",
+    "cross-env": "^7.0.3",
     "prisma": "^6.10.1",
+    "tsc-alias": "^1.8.16",
     "tsx": "^4.20.3",
     "typescript": "^5"
   },
@@ -17,6 +25,7 @@
     "dotenv": "^17.0.1",
     "hono": "^4.8.0",
     "playwright": "^1.53.2",
+    "tsconfig-paths": "^4.2.0",
     "winston": "^3.17.0",
     "zod": "^3.25.67"
   }

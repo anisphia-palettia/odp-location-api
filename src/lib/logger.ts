@@ -1,5 +1,5 @@
 import * as winston from "winston";
-import {appConfig} from "@/config/app-config.ts";
+import {appConfig} from "@/config/app-config";
 
 export const logger = winston.createLogger({
     level: "info",

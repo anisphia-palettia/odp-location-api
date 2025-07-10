@@ -1,8 +1,8 @@
-import {LocalHono} from "@/types/LocalHono.ts";
-import {whitChatId} from "@/middleware/with-chat-id.ts";
-import WhatsappService from "@/service/whatsapp-service.ts";
-import {handleServiceResponse} from "@/utils/handle-service-response.ts";
-import {appConfig} from "@/config/app-config.ts";
+import {LocalHono} from "@/types/LocalHono";
+import {whitChatId} from "@/middleware/with-chat-id";
+import WhatsappService from "@/service/whatsapp-service";
+import {handleServiceResponse} from "@/utils/handle-service-response";
+import {appConfig} from "@/config/app-config";
 
 const m_odpFilter = new LocalHono()
 

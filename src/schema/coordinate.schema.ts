@@ -2,13 +2,13 @@ import {z} from "zod";
 
 export const CoordinateSchema = {
     update: z.object({
-        lat: z.number().optional(),
-        long: z.number().optional(),
+        lat: z.string().optional(),
+        long: z.string().optional(),
         address: z.string().optional(),
         urlId: z.string().optional(),
+        url: z.string().optional(),
         isAccepted: z.boolean().optional(),
     }),
-    updateByUrl: z.object({
-        url: z.string(),
-    })
 }
+
+export  type CoordinateUpdateInput = z.infer<typeof CoordinateSchema.update>

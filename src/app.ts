@@ -1,7 +1,7 @@
-import {LocalHono} from "@/types/LocalHono.ts";
-import _r_api from "@/route/_r_api.ts";
-import errorHandler from "@/middleware/error-handler.ts";
-import r_webhook from "@/route/r_webhook.ts";
+import {LocalHono} from "@/types/LocalHono";
+import _r_api from "@/route/_r_api";
+import errorHandler from "@/middleware/error-handler";
+import r_webhook from "@/route/r_webhook";
 import {serveStatic} from '@hono/node-server/serve-static'
 import {cors} from 'hono/cors'
 

@@ -1,15 +1,15 @@
-import {LocalHono} from "@/types/LocalHono.ts";
-import {sendSuccess} from "@/utils/response.ts";
-import type {IWhatsappWebhookMessage} from "@/types/whatsapp.ts";
-import {saveFile} from "@/utils/save-file.ts";
-import {appConfig} from "@/config/app-config.ts";
+import {LocalHono} from "@/types/LocalHono";
+import {sendSuccess} from "@/utils/response";
+import type {IWhatsappWebhookMessage} from "@/types/whatsapp";
+import {saveFile} from "@/utils/save-file";
+import {appConfig} from "@/config/app-config";
 import * as path from "node:path";
-import {GroupService} from "@/service/group-service.ts";
-import {CoordinateService} from "@/service/coordinate-service.ts";
-import {logger} from "@/lib/logger.ts";
-import {getCoordinatesFromPage} from "@/utils/scrapping.ts";
-import WhatsappService from "@/service/whatsapp-service.ts";
-import {ErrorService} from "@/service/error-service.ts";
+import {GroupService} from "@/service/group-service";
+import {CoordinateService} from "@/service/coordinate-service";
+import {logger} from "@/lib/logger";
+import {getCoordinatesFromPage} from "@/utils/scrapping";
+import WhatsappService from "@/service/whatsapp-service";
+import {ErrorService} from "@/service/error-service";
 
 const r_webhook = new LocalHono();
 

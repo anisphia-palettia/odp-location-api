@@ -1,6 +1,6 @@
-import whatsappServiceClient from "@/lib/whatsapp-service-client.ts";
-import type {ApiResponse} from "@/types/ApiResponse.ts";
-import {appConfig} from "@/config/app-config.ts";
+import whatsappServiceClient from "@/lib/whatsapp-service-client";
+import type {ApiResponse} from "@/types/ApiResponse";
+import {appConfig} from "@/config/app-config";
 
 export default function WhatsappService(sessionId: string = appConfig.sessionId) {
     return {

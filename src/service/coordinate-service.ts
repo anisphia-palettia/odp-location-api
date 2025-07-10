@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma.ts";
-import type { Coordinates } from "@/types/whatsapp.ts";
+import { prisma } from "@/lib/prisma";
+import type { Coordinates } from "@/types/whatsapp";
 
 export const CoordinateService = {
   async create(data: Coordinates, imagePath: string, groupId: number) {

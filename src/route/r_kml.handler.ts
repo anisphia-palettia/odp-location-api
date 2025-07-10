@@ -1,6 +1,6 @@
-import {LocalHono} from "@/types/LocalHono.ts";
-import {GroupService} from "@/service/group-service.ts";
-import {generateAllGroupsKML, generateKML} from "@/utils/generate-kml.ts";
+import {LocalHono} from "@/types/LocalHono";
+import {GroupService} from "@/service/group-service";
+import {generateAllGroupsKML, generateKML} from "@/utils/generate-kml";
 import {HTTPException} from "hono/http-exception";
 
 const   r_kmlHandler = new LocalHono()

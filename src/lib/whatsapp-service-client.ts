@@ -1,6 +1,6 @@
 import axios from "axios";
-import {appConfig} from "@/config/app-config.ts";
-import {logger} from "@/lib/logger.ts";
+import {appConfig} from "@/config/app-config";
+import {logger} from "@/lib/logger";
 
 const whatsappServiceClient = axios.create({
     baseURL: appConfig.whatsappServiceUrl,

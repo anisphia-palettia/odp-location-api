@@ -1,6 +1,6 @@
 import type {Context} from "hono";
-import type {ApiResponse} from "@/types/ApiResponse.ts";
-import {sendError, sendSuccess} from "@/utils/response.ts";
+import type {ApiResponse} from "@/types/ApiResponse";
+import {sendError, sendSuccess} from "@/utils/response";
 import type {ContentfulStatusCode} from "hono/utils/http-status";
 
 export async function handleServiceResponse<T>(

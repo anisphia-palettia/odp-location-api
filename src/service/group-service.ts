@@ -1,4 +1,4 @@
-import {prisma} from "@/lib/prisma.ts";
+import {prisma} from "@/lib/prisma";
 
 export const GroupService = {
     async create(data: { name: string; chatId: string }) {

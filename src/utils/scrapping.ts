@@ -1,5 +1,5 @@
-import {getBrowser} from "@/utils/browser-manager.ts";
-import type {Coordinates} from "@/types/whatsapp.ts";
+import {getBrowser} from "@/utils/browser-manager";
+import type {Coordinates} from "@/types/whatsapp";
 import type {Page} from "playwright";
 
 export async function getCoordinatesFromPage(url: string): Promise<Coordinates | null> {
@@ -30,7 +30,6 @@ export async function getCoordinatesFromPage(url: string): Promise<Coordinates |
                 const [lat, lng] = parts;
                 const urlParts = url.split('/');
                 const urlId = urlParts[4];
-                console.log(urlId);
                 return {lat, long: lng, address: addressText, urlId};
             } else {
                 console.warn('Format GPS tidak valid:', gpsText);

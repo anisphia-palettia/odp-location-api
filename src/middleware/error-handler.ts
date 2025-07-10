@@ -1,8 +1,8 @@
 import type {Context} from "hono";
 import {HTTPException} from "hono/http-exception";
 import {ZodError} from "zod";
-import {appConfig} from "@/config/app-config.ts";
-import {sendError} from "@/utils/response.ts";
+import {appConfig} from "@/config/app-config";
+import {sendError} from "@/utils/response";
 
 const isDev = appConfig.nodeEnv === "development";
 
