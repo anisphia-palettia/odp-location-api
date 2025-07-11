@@ -29,6 +29,11 @@ r_groupsHandler.get("/:chatId", async (c) => {
                 latitude: coordinate.lat,
                 longitude: coordinate.long,
                 image_name: coordinate.imagePath,
+                address: coordinate.address,
+                isAccepted: coordinate.isAccepted,
+                urlId: coordinate.urlId,
+                createdAt: coordinate.createdAt,
+                updatedAt: coordinate.updatedAt,
             })),
         },
     });

@@ -1,6 +1,7 @@
 import type {Context} from "hono";
 import {appConfig} from "@/config/app-config";
 import type {ContentfulStatusCode} from "hono/utils/http-status";
+import {logger} from "@/lib/logger";
 
 type ApiResponseSuccess<T = any> = {
     success: boolean;
@@ -64,7 +65,7 @@ export function sendError(
         status: ContentfulStatusCode;
     }
 ) {
-    console.log("ERROR", message, stack)
+    logger.error("ERROR", message, stack)
     return c.json<ApiResponseError>(
         {
             success: false,

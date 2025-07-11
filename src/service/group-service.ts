@@ -64,7 +64,11 @@ export const GroupService = {
         return prisma.group.findUnique({
             where: {chatId},
             include: {
-                coordinates: true,
+                coordinates: {
+                    orderBy : {
+                        createdAt: "asc"
+                    },
+                },
             },
         });
     },
