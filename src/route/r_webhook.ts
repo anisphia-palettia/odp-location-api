@@ -99,7 +99,6 @@ r_webhook.post("", async (c) => {
             data.msg
         );
 
-        // Catat ke ErrorService, walau belum tahu groupId
         const existingGroup = await GroupService.getByChatId(data.chatId);
         await ErrorService.create(normalizedLink, existingGroup?.id ?? 0);
 

@@ -1,4 +1,4 @@
-import {prisma} from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export const ErrorService = {
     async create(url: string, groupId: number) {
@@ -6,14 +6,16 @@ export const ErrorService = {
             data: {
                 url,
                 groupId,
-            }
-        })
-    }, async update(isDone: boolean, id: number) {
+            },
+        });
+    },
+
+    async update(isDone: boolean, id: number) {
         return prisma.error.update({
-            where: {id},
+            where: { id },
             data: {
-                done: isDone
-            }
-        })
-    }
-}
+                done: isDone,
+            },
+        });
+    },
+};
