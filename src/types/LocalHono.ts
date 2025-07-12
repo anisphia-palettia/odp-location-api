@@ -2,7 +2,7 @@ import {Hono} from "hono";
 
 type Variables = {
     sessionId: string;
-    chatId: string;
+    groupId: string;
 }
 
 export class LocalHono extends Hono<{

@@ -2,6 +2,7 @@ import {LocalHono} from "@/types/LocalHono";
 import {GroupService} from "@/service/group-service";
 import {generateAllGroupsKML, generateKML} from "@/utils/generate-kml";
 import {HTTPException} from "hono/http-exception";
+import {GroupCoordinateService} from "@/service/group-coordinate.service";
 
 const   r_kmlHandler = new LocalHono()
 
@@ -22,7 +23,7 @@ r_kmlHandler.get("/", async (c) => {
 
 r_kmlHandler.get("/:chatId", async (c) => {
     const chatId = c.req.param("chatId");
-    const group = await GroupService.getWithCoordinatesByChatId(chatId);
+    const group = await GroupCoordinateService.getGroupCoordinatesByChatId(chatId);
     if (!group) {
         throw new HTTPException(404, {message: "Group not found"});
     }

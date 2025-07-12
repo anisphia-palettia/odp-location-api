@@ -1,13 +1,13 @@
 import type {MiddlewareHandler} from "hono";
 import {HTTPException} from "hono/http-exception";
 
-export function whitChatId(): MiddlewareHandler {
+export function withGroupId(): MiddlewareHandler {
     return async (c, next) => {
-        const chatId = c.req.query("chatId");
-        if (!chatId) {
-            throw new HTTPException(400, {message: "Missing chatId in query"});
+        const groupId = c.req.query("chatId");
+        if (!groupId) {
+            throw new HTTPException(400, {message: "Missing groupId in query"});
         }
-        c.set("chatId", chatId);
+        c.set("groupId", groupId);
         await next();
     }
 }

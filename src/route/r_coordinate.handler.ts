@@ -7,6 +7,26 @@ import validate from "@/middleware/validate";
 
 const r_coordinateHandler = new LocalHono()
 
+r_coordinateHandler.get("", async (c) => {
+    const coordinates = await CoordinateService.getAll()
+    return sendSuccess(c, {
+        message: "Success get all coordinates",
+        data: coordinates,
+    })
+})
+
+r_coordinateHandler.get("/:id", async (c) => {
+    const id = c.req.param("id")
+    const coordinate = await CoordinateService.getById(Number(id))
+    if (!coordinate) {
+        throw new Error("Coordinate not found")
+    }
+    return sendSuccess(c, {
+        message: "Success get coordinate by id",
+        data: coordinate,
+    })
+})
+
 r_coordinateHandler.put("/:id", validate("json", CoordinateSchema.update), async (c) => {
     const id = c.req.param("id")
     const data = c.req.valid("json") as CoordinateUpdateInput

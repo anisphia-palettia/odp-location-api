@@ -26,7 +26,7 @@ model Coordinate {
   groupId    Int?      @map("group_id")
   address    String?   @map("address")
   urlId      String?   @map("url_id")
-  Group      Group?    @relation("group_coordinates", fields: [groupId], references: [id])
+  group      Group?    @relation("group_coordinates", fields: [groupId], references: [id])
   isAccepted Boolean   @default(false) @map("is_accepted")
   createdAt  DateTime  @default(now()) @map("created_at")
   updatedAt  DateTime? @updatedAt @map("updated_at")
@@ -39,7 +39,7 @@ model Error {
   url     String  @map("url")
   done    Boolean @default(false) @map("done")
   groupId Int?    @map("group_id")
-  Group   Group?  @relation("group_erros", fields: [groupId], references: [id])
+  group   Group?  @relation("group_erros", fields: [groupId], references: [id])
 
   @@map("error")
 }

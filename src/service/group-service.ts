@@ -52,25 +52,26 @@ export const GroupService = {
             },
         });
 
-        return groups.map(group => ({
-            id: group.id,
-            name: group.name,
-            chatId: group.chatId,
-            totalCoordinates: group._count.coordinates,
-        }));
-    },
-
-    async getWithCoordinatesByChatId(chatId: string) {
-        return prisma.group.findUnique({
-            where: {chatId},
-            include: {
-                coordinates: {
-                    orderBy : {
-                        createdAt: "asc"
+        const results = await Promise.all(
+            groups.map(async (group) => {
+                const notAcceptedCount = await prisma.coordinate.count({
+                    where: {
+                        groupId: group.id,
+                        isAccepted: false,
                     },
-                },
-            },
-        });
+                });
+
+                return {
+                    id: group.id,
+                    name: group.name,
+                    chatId: group.chatId,
+                    totalCoordinates: group._count.coordinates,
+                    totalIsNotAccepted: notAcceptedCount,
+                };
+            })
+        );
+
+        return results;
     },
 
     async getAllWithCoordinates() {
