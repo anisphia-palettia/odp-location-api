@@ -8,6 +8,7 @@ export const CoordinateSchema = {
         urlId: z.string().optional(),
         url: z.string().optional(),
         isAccepted: z.boolean().optional(),
+        isReject: z.boolean().optional(),
     }),
 }
 

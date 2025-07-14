@@ -28,6 +28,7 @@ model Coordinate {
   urlId      String?   @map("url_id")
   group      Group?    @relation("group_coordinates", fields: [groupId], references: [id])
   isAccepted Boolean   @default(false) @map("is_accepted")
+  isReject   Boolean   @default(false) @map("is_reject")
   createdAt  DateTime  @default(now()) @map("created_at")
   updatedAt  DateTime? @updatedAt @map("updated_at")
 

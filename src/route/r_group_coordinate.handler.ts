@@ -24,6 +24,7 @@ r_groupCoordinateHandler.get("/:chatId", async (c) => {
                 image_name: coordinate.imagePath,
                 address: coordinate.address,
                 isAccepted: coordinate.isAccepted,
+                isReject: coordinate.isReject,
                 urlId: coordinate.urlId,
                 createdAt: coordinate.createdAt,
                 updatedAt: coordinate.updatedAt,

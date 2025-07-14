@@ -1,7 +1,6 @@
 import {LocalHono} from "@/types/LocalHono";
 import {GroupService} from "@/service/group-service";
 import {sendSuccess} from "@/utils/response";
-import {HTTPException} from "hono/http-exception";
 
 const r_groupsHandler = new LocalHono();
 

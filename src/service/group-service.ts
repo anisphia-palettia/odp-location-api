@@ -1,4 +1,5 @@
 import {prisma} from "@/lib/prisma";
+import {tr} from "zod/dist/types/v4/locales";
 
 export const GroupService = {
     async create(data: { name: string; chatId: string }) {
@@ -42,37 +43,45 @@ export const GroupService = {
     },
 
     async getAllWithCoordinateCount() {
-        const groups = await prisma.group.findMany({
-            include: {
-                _count: {
-                    select: {
-                        coordinates: true,
-                    },
-                },
+        const coordinateCounts = await prisma.coordinate.groupBy({
+            by: ['groupId'],
+            where: {
+                isReject: false,
+            },
+            _count: {
+                id: true,
             },
         });
 
-        const results = await Promise.all(
-            groups.map(async (group) => {
-                const notAcceptedCount = await prisma.coordinate.count({
-                    where: {
-                        groupId: group.id,
-                        isAccepted: false,
-                    },
-                });
+        const notAcceptedCounts = await prisma.coordinate.groupBy({
+            by: ['groupId'],
+            where: {
+                isAccepted: false,
+                isReject: false,
+            },
+            _count: {
+                id: true,
+            },
+        });
 
-                return {
-                    id: group.id,
-                    name: group.name,
-                    chatId: group.chatId,
-                    totalCoordinates: group._count.coordinates,
-                    totalIsNotAccepted: notAcceptedCount,
-                };
-            })
-        );
+        const groups = await prisma.group.findMany();
+
+        const results = groups.map((group) => {
+            const coordinateCount = coordinateCounts.find((c) => c.groupId === group.id);
+            const notAccepted = notAcceptedCounts.find((rc) => rc.groupId === group.id);
+
+            return {
+                id: group.id,
+                name: group.name,
+                chatId: group.chatId,
+                totalCoordinates: coordinateCount?._count.id ?? 0,     // exclude rejected
+                totalIsNotAccepted: notAccepted?._count.id ?? 0,       // only pending (not accepted + not rejected)
+            };
+        });
 
         return results;
-    },
+    }
+    ,
 
     async getAllWithCoordinates() {
         return prisma.group.findMany({
