@@ -74,10 +74,12 @@ export const GroupService = {
                 id: group.id,
                 name: group.name,
                 chatId: group.chatId,
-                totalCoordinates: coordinateCount?._count.id ?? 0,     // exclude rejected
-                totalIsNotAccepted: notAccepted?._count.id ?? 0,       // only pending (not accepted + not rejected)
+                totalCoordinates: coordinateCount?._count.id ?? 0,
+                totalIsNotAccepted: notAccepted?._count.id ?? 0,
             };
         });
+
+        results.sort((a, b) => a.name.localeCompare(b.name));
 
         return results;
     }
