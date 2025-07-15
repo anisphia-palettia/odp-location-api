@@ -46,6 +46,7 @@ export const GroupService = {
         const coordinateCounts = await prisma.coordinate.groupBy({
             by: ['groupId'],
             where: {
+                isAccepted: true,
                 isReject: false,
             },
             _count: {
@@ -83,6 +84,7 @@ export const GroupService = {
 
         return results;
     }
+
     ,
 
     async getAllWithCoordinates() {
