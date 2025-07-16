@@ -26,8 +26,7 @@ r_groupCoordinateHandler.get("/:chatId", async (c) => {
                 isAccepted: coordinate.isAccepted,
                 isReject: coordinate.isReject,
                 urlId: coordinate.urlId,
-                createdAt: coordinate.createdAt,
-                updatedAt: coordinate.updatedAt,
+                photoTakenAt: coordinate.photoTakenAt,
             })),
         },
     });

@@ -7,7 +7,7 @@ export const GroupCoordinateService = {
             include: {
                 coordinates: {
                     orderBy: {
-                        createdAt: "asc"
+                        photoTakenAt: "asc"
                     },
                 },
             },

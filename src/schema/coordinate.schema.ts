@@ -9,6 +9,8 @@ export const CoordinateSchema = {
         url: z.string().optional(),
         isAccepted: z.boolean().optional(),
         isReject: z.boolean().optional(),
+        photoTakenAt: z.string().optional(),
+        createdAt: z.string().optional(),
     }),
 }
 
