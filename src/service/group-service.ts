@@ -20,7 +20,9 @@ export const GroupService = {
     },
 
     async getAll() {
-        return prisma.group.findMany();
+        const results = await prisma.group.findMany();
+        results.sort((a, b) => a.name.localeCompare(b.name));
+        return results;
     },
 
     async updateById(id: number, data: { name?: string; chatId?: string }) {
@@ -45,47 +47,34 @@ export const GroupService = {
     async getAllWithCoordinateCount() {
         const coordinateCounts = await prisma.coordinate.groupBy({
             by: ['groupId'],
-            where: {
-                isAccepted: true,
-                isReject: false,
-            },
-            _count: {
-                id: true,
-            },
+            where: {isAccepted: true, isReject: false},
+            _count: {id: true},
         });
 
         const notAcceptedCounts = await prisma.coordinate.groupBy({
             by: ['groupId'],
-            where: {
-                isAccepted: false,
-                isReject: false,
-            },
-            _count: {
-                id: true,
-            },
+            where: {isAccepted: false, isReject: false},
+            _count: {id: true},
         });
+
+        const coordinateMap = new Map(coordinateCounts.map(c => [c.groupId, c._count.id]));
+        const notAcceptedMap = new Map(notAcceptedCounts.map(c => [c.groupId, c._count.id]));
 
         const groups = await prisma.group.findMany();
 
-        const results = groups.map((group) => {
-            const coordinateCount = coordinateCounts.find((c) => c.groupId === group.id);
-            const notAccepted = notAcceptedCounts.find((rc) => rc.groupId === group.id);
-
-            return {
-                id: group.id,
-                name: group.name,
-                chatId: group.chatId,
-                totalCoordinates: coordinateCount?._count.id ?? 0,
-                totalIsNotAccepted: notAccepted?._count.id ?? 0,
-            };
-        });
+        const results = groups.map(group => ({
+            id: group.id,
+            name: group.name,
+            chatId: group.chatId,
+            totalCoordinates: coordinateMap.get(group.id) ?? 0,
+            totalIsNotAccepted: notAcceptedMap.get(group.id) ?? 0,
+        }));
 
         results.sort((a, b) => a.name.localeCompare(b.name));
 
         return results;
-    }
+    },
 
-    ,
 
     async getAllWithCoordinates() {
         return prisma.group.findMany({

@@ -5,7 +5,7 @@ import {sendSuccess} from "@/utils/response";
 const r_groupsHandler = new LocalHono();
 
 r_groupsHandler.get("/", async (c) => {
-    const groups = await GroupService.getAllWithCoordinateCount();
+    const groups = await GroupService.getAllWithCoordinateCount()
     return sendSuccess(c, {
         message: "Success get all groups with coordinate count",
         data: groups,

@@ -1,6 +1,7 @@
 import {getBrowser} from "@/utils/browser-manager";
 import type {Coordinates} from "@/types/whatsapp";
 import type {Page} from "playwright";
+import {logger} from "@/lib/logger";
 
 export async function getCoordinatesFromPage(url: string): Promise<Coordinates | null> {
     const browser = await getBrowser();
@@ -32,17 +33,17 @@ export async function getCoordinatesFromPage(url: string): Promise<Coordinates |
                 const urlId = urlParts[4];
                 return {lat, long: lng, address: addressText, urlId};
             } else {
-                console.warn('Format GPS tidak valid:', gpsText);
+                logger.warn('Format GPS tidak valid:', gpsText);
                 return null;
             }
         } else {
-            console.warn('gpsText kosong atau null');
+            logger.warn('gpsText kosong atau null');
             return null;
         }
     } catch (err) {
-        console.error('Error:', err);
+        logger.error('Error:', err);
         return null;
     } finally {
-        await page.close(); // hanya tutup tab
+        await page.close();
     }
 }

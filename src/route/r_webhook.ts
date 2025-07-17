@@ -1,15 +1,15 @@
-import { LocalHono } from "@/types/LocalHono";
-import { sendSuccess } from "@/utils/response";
-import type { IWhatsappWebhookMessage } from "@/types/whatsapp";
-import { saveFile } from "@/utils/save-file";
-import { appConfig } from "@/config/app-config";
+import {LocalHono} from "@/types/LocalHono";
+import {sendSuccess} from "@/utils/response";
+import type {IWhatsappWebhookMessage} from "@/types/whatsapp";
+import {saveFile} from "@/utils/save-file";
+import {appConfig} from "@/config/app-config";
 import * as path from "node:path";
-import { GroupService } from "@/service/group-service";
-import { CoordinateService } from "@/service/coordinate-service";
-import { logger } from "@/lib/logger";
-import { getCoordinatesFromPage } from "@/utils/scrapping";
-import { ErrorService } from "@/service/error-service";
-import { notifyUser } from "@/utils/notify-user";
+import {GroupService} from "@/service/group-service";
+import {CoordinateService} from "@/service/coordinate-service";
+import {logger} from "@/lib/logger";
+import {getCoordinatesFromPage} from "@/utils/scrapping";
+import {ErrorService} from "@/service/error-service";
+import {notifyUser} from "@/utils/notify-user";
 
 const r_webhook = new LocalHono();
 
@@ -20,6 +20,15 @@ r_webhook.post("", async (c) => {
         logger.warn(`[${data.messageId}] Dilewatkan - tidak ada teks`);
         return sendSuccess(c, {
             message: "Dilewatkan: tidak ada teks",
+            data: null,
+        });
+    }
+
+    let group = await GroupService.getByChatId(data.chatId);
+    if (!group) {
+        logger.warn(`[${data.messageId}] Dilewatkan - grup tidak terdaftar: ${data.chatId}`);
+        return sendSuccess(c, {
+            message: "Dilewatkan: grup tidak terdaftar",
             data: null,
         });
     }
@@ -112,19 +121,8 @@ r_webhook.post("", async (c) => {
     const mediaUrl = appConfig.whatsappServiceUrl + `/${data.mediaPath}`;
 
     logger.info(`[${data.messageId}] Menyimpan file dari ${mediaUrl} ke ${relativeFilePath}`);
-    const { fullPath } = await saveFile(mediaUrl, relativeFilePath);
+    const {fullPath} = await saveFile(mediaUrl, relativeFilePath);
     logger.info(`[${data.messageId}] File berhasil disimpan: ${fullPath}`);
-
-    let group = await GroupService.getByChatId(data.chatId);
-    if (!group) {
-        group = await GroupService.create({
-            name: data.name,
-            chatId: data.chatId,
-        });
-    } else if (group.name !== data.name) {
-        logger.info(`[${data.messageId}] Nama grup diperbarui dari ${group.name} ke ${data.name}`);
-        await GroupService.updateById(group.id, { name: data.name });
-    }
 
     await CoordinateService.create(coordinates, fileName, group.id);
 
